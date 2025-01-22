@@ -4,14 +4,22 @@ const express = require('express')
 
 const app = express()
 
-/*app.get('/produtos', (req,resp,next)=>{
-    console.log('Midleware 1...')
-    next()
-})  midleware funcionndo na pratica*/
+const db = require('./db')
 
-app.get('/produtos', (req,resp,next)=>{
-    resp.send({nome:'Pc',preco:2000}) // send converte para json
-    next()
+app.get('/produtos', (req,res,next)=>{
+    res.send(db.getProdutos())
+})
+
+app.get('/produtos/:id',(req,res,next)=>{
+    res.send(db.getProduto(req.params.id)) 
+})
+
+app.post('/produtos',(req,res,next)=>{
+    const produto = db.salvarProduto({
+        nome: req.body.name,
+        preco: req.body.preco
+    })
+    res.send(produto)
 })
 
 
